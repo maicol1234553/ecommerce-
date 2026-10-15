@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,5 +21,5 @@ public class Usuario {
     private String rol;
     private Integer edad;
     private String numeroTelefonico;
-
+    private Double saldo;
 }

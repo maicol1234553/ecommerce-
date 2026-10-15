@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 
 @RestController
@@ -73,4 +74,25 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/{id}/saldo")
+    public ResponseEntity<Double>consultarSaldo(@PathVariable String id){
+        Double saldo = usuarioUseCase.consultarSaldo(id);
+        return ResponseEntity.ok(saldo);
+    }
+    @PostMapping("/{id}/recargar")
+    public ResponseEntity<String> recargarSaldo(@PathVariable String id, @RequestBody Map<String, Double> request){
+        Double monto = request.get("monto");
+        usuarioUseCase.recargarSaldo(id, monto);
+        return ResponseEntity.ok("Saldo recargado exitosamente");
+    }
+
+    @PostMapping("/{id}/descontar")
+    public ResponseEntity<String> descontarSaldo(@PathVariable String id, @RequestBody Map<String, Double> request) {
+        // Obtenemos el monto del JSON
+        Double monto = request.get("monto");
+        usuarioUseCase.descontarSaldo(id, monto);
+        return ResponseEntity.ok("Descuento de saldo realizado correctamente");
+    }
 }
+
+
