@@ -1,4 +1,4 @@
-package com.ecommerce.catalogo.domain.model.usecase;
+package com.ecommerce.catalogo.domain.usecase;
 
 import com.ecommerce.catalogo.domain.model.Producto;
 import com.ecommerce.catalogo.domain.model.gateway.ProductoGateway;
@@ -16,22 +16,23 @@ public class ProductoUseCase {
     }
 
 
-    public Producto obtenerProducto(String id) {
-        try {
-            return productoGateway.buscarProductoPorId(id);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return new Producto();
-        }
+    public Producto buscarProductoPorId(String id) {
+        return productoGateway.buscarProductoPorId(id);
     }
 
 
-    public List<Producto> obtenerTodos() {
+    public List<Producto> listarTodos() {
+
         return productoGateway.listarTodos();
     }
 
 
     public void eliminarProducto(String id) {
+
         productoGateway.eliminarProducto(id);
+    }
+    public Producto actualizarProducto(Producto producto) {
+
+        return productoGateway.actualizarProducto(producto);
     }
 }

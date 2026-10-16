@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 public class UsuarioData {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
 
     private String idUsuario;
-    @Column (length = 255, nullable = false)
+    @Column(length = 255, nullable = false)
     private String nombre;
-    @Column (length = 255, nullable = false, unique = true)
+    @Column(length = 255, nullable = false, unique = true)
     private String correo;
     @Column(length = 255, nullable = false)
     private String password;
@@ -29,4 +29,6 @@ public class UsuarioData {
     private Integer edad;
     @Column(length = 10, nullable = false)
     private String numeroTelefonico;
+    @Column(nullable = true)
+    private Double saldo = 0.0;
 }
