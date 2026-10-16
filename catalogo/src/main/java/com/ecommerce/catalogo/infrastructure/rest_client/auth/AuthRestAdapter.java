@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Component
@@ -33,12 +34,12 @@ public class AuthRestAdapter implements AuthGateway {
     }
 
     @Override
-    public void solicitarDescuentoSaldo(String usuarioId, Double montoTotal) {
+    public void solicitarDescuentoSaldo(String usuarioId, BigDecimal montoTotal) {
         // Ruta real en auth: POST /api/ecommerce/usuario/{id}/descontar (body: {"monto": valor})
         String url = authServiceUrl + "/" + usuarioId + "/descontar";
 
         // Enviamos el monto a descontar en el cuerpo de la petición
-        Map<String, Double> requestBody = Map.of("monto", montoTotal);
+        Map<String, BigDecimal> requestBody = Map.of("monto", montoTotal);
 
         ResponseEntity<Void> response = restTemplate.postForEntity(url, requestBody, Void.class);
 

@@ -4,6 +4,8 @@ import com.ecommerce.auth.domain.model.Usuario;
 import com.ecommerce.auth.domain.model.gateway.UsuarioGateway;
 import lombok.RequiredArgsConstructor;
 
+import java.math.BigDecimal;
+
 @RequiredArgsConstructor
 
 public class UsuarioUseCase {
@@ -18,7 +20,7 @@ public class UsuarioUseCase {
         String passwordEncrypt = encrypterGateway.encrypt(usuario.getPassword());
         usuario.setPassword(passwordEncrypt);
 
-        usuario.setSaldo(0.0);
+        usuario.setSaldo(BigDecimal.ZERO);
 
         return usuarioGateway.guardarUsuario(usuario);
     }
@@ -90,7 +92,7 @@ public class UsuarioUseCase {
                     -> throw new IllegalArgumentException("no puede tener mas de 122 años ");
             case Usuario u when u.getNumeroTelefonico() == null || u.getNumeroTelefonico().isBlank()
                     -> throw new IllegalArgumentException("El número telefónico es obligatorio");
-            case Usuario u when u.getSaldo() != null && u.getSaldo() < 0
+            case Usuario u when u.getSaldo() != null && u.getSaldo().compareTo(BigDecimal.ZERO) < 0
                     -> throw new IllegalArgumentException("El saldo no puede tomar valores negativos");
             case Usuario u when !u.getNumeroTelefonico().matches("\\d{10}")
                     -> throw new IllegalArgumentException("El número telefónico debe tener 10 dígitos");
@@ -107,32 +109,32 @@ public class UsuarioUseCase {
             default -> { }
         }
     }
-    public double consultarSaldo (String usuarioId){
+    public BigDecimal consultarSaldo (String usuarioId){
         Usuario usuario = buscarUsuarioPorId(usuarioId);
         return usuario.getSaldo();
     }
-    public void recargarSaldo(String usuarioId, Double monto){
-        if (monto == null || monto <=0){
+    public void recargarSaldo(String usuarioId, BigDecimal monto){
+        if (monto == null || monto.compareTo(BigDecimal.ZERO) <= 0){
             throw new IllegalArgumentException("El monto de recargar debe ser mayor que 0 ");
         }
         Usuario usuario = buscarUsuarioPorId(usuarioId);
-        usuario.setSaldo(usuario.getSaldo()+monto);
+        usuario.setSaldo(usuario.getSaldo().add(monto));
         usuarioGateway.actualizarUsuario(usuario);
     }
-    public void descontarSaldo(String usuarioId, Double monto){
-        if (monto == null || monto <= 0) {
+    public void descontarSaldo(String usuarioId, BigDecimal monto){
+        if (monto == null || monto.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("El monto a descontar debe ser mayor a cero");
         }
 
         Usuario usuario = buscarUsuarioPorId(usuarioId);
 
         // 2. Regla de negocio en el Caso de Uso: Validar saldo negativo
-        if (usuario.getSaldo() < monto) {
+        if (usuario.getSaldo().compareTo(monto) < 0) {
             throw new IllegalArgumentException("Saldo insuficiente para realizar la compra");
         }
 
         // 3. Operación matemática en el Caso de Uso
-        usuario.setSaldo(usuario.getSaldo() - monto);
+        usuario.setSaldo(usuario.getSaldo().subtract(monto));
 
         usuarioGateway.actualizarUsuario(usuario);
     }

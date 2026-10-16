@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.ecommerce.catalogo.domain.model.UsuarioInfo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -132,12 +133,12 @@ public class CarritoUseCase {
             throw new RuntimeException("El usuario no existe.");
         }
 
-        if (usuario.getSaldo() < totalCompra) {
+        if (usuario.getSaldo().compareTo(BigDecimal.valueOf(totalCompra)) < 0) {
             throw new RuntimeException("Compra rechazada: Saldo insuficiente.");
         }
 
         // 3. EJECUTAR COBRO EN AUTH
-        authGateway.solicitarDescuentoSaldo(usuarioId, totalCompra);
+        authGateway.solicitarDescuentoSaldo(usuarioId, BigDecimal.valueOf(totalCompra));
 
         // 4. DESCONTAR INVENTARIO
         for (ItemCarrito item : carrito.getItems()) {
