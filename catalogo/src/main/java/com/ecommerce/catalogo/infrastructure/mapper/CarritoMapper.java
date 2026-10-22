@@ -28,7 +28,7 @@ public class CarritoMapper {
                     itemData.setPrecioUnitario(item.getPrecioUnitario());
                     itemData.setCantidad(item.getCantidad());
                     itemData.setSubtotal(item.getSubtotal());
-                    itemData.setCarrito(carritoData); // importante establecer relación bidireccional
+                    itemData.setCarrito(carritoData);
                     return itemData;
                 }).collect(Collectors.toList());
 

@@ -23,7 +23,7 @@ public class UsuarioController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> datosInvalidos(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.OK).body(ex.getMessage());
     }
 
     @PostMapping("/save")
@@ -31,7 +31,7 @@ public class UsuarioController {
         Usuario usuario = usuarioMapper.toUsuario(usuarioData);
         Usuario usuarioGuardado = usuarioUseCase.guardarUsuario(usuario);
 
-        return new ResponseEntity<>(usuarioGuardado, HttpStatus.CREATED);
+        return new ResponseEntity<>(usuarioGuardado, HttpStatus.OK);
     }
 
     @GetMapping("/id/{id}")
@@ -89,7 +89,6 @@ public class UsuarioController {
 
     @PostMapping("/{id}/descontar")
     public ResponseEntity<String> descontarSaldo(@PathVariable String id, @RequestBody Map<String, BigDecimal> request) {
-        // Obtenemos el monto del JSON
         BigDecimal monto = request.get("monto");
         usuarioUseCase.descontarSaldo(id, monto);
         return ResponseEntity.ok("Descuento de saldo realizado correctamente");

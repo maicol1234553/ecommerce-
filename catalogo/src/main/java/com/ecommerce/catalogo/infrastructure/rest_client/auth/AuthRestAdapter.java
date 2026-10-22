@@ -17,13 +17,12 @@ public class AuthRestAdapter implements AuthGateway {
 
     private final RestTemplate restTemplate;
 
-    // URL base real del microservicio Auth (UsuarioController: @RequestMapping("/api/ecommerce/usuario"))
     @Value("${auth.service.url:http://localhost:8081/api/ecommerce/usuario}")
     private String authServiceUrl;
 
     @Override
     public UsuarioInfo consultarDatosUsuario(String usuarioId) {
-        // Ruta real en auth: GET /api/ecommerce/usuario/id/{id}
+
         String url = authServiceUrl + "/id/" + usuarioId;
         ResponseEntity<UsuarioInfo> response = restTemplate.getForEntity(url, UsuarioInfo.class);
 
@@ -35,10 +34,9 @@ public class AuthRestAdapter implements AuthGateway {
 
     @Override
     public void solicitarDescuentoSaldo(String usuarioId, BigDecimal montoTotal) {
-        // Ruta real en auth: POST /api/ecommerce/usuario/{id}/descontar (body: {"monto": valor})
         String url = authServiceUrl + "/" + usuarioId + "/descontar";
 
-        // Enviamos el monto a descontar en el cuerpo de la petición
+
         Map<String, BigDecimal> requestBody = Map.of("monto", montoTotal);
 
         ResponseEntity<Void> response = restTemplate.postForEntity(url, requestBody, Void.class);
@@ -54,7 +52,7 @@ public class AuthRestAdapter implements AuthGateway {
             ResponseEntity<UsuarioInfo> response = restTemplate.getForEntity(url, UsuarioInfo.class);
             return response.getStatusCode().is2xxSuccessful() && response.getBody() != null;
         } catch (Exception e) {
-            // Si el servicio responde 404 (Not Found) o hay error de red, asumimos que no existe
+
             return false;
         }
     }

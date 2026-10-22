@@ -128,12 +128,10 @@ public class UsuarioUseCase {
 
         Usuario usuario = buscarUsuarioPorId(usuarioId);
 
-        // 2. Regla de negocio en el Caso de Uso: Validar saldo negativo
         if (usuario.getSaldo().compareTo(monto) < 0) {
             throw new IllegalArgumentException("Saldo insuficiente para realizar la compra");
         }
 
-        // 3. Operación matemática en el Caso de Uso
         usuario.setSaldo(usuario.getSaldo().subtract(monto));
 
         usuarioGateway.actualizarUsuario(usuario);

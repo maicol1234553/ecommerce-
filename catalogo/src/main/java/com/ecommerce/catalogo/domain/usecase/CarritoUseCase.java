@@ -109,7 +109,6 @@ public class CarritoUseCase {
             throw new RuntimeException("Este carrito ya fue procesado.");
         }
 
-        // 1. VALIDACIÓN DE STOCK Y CÁLCULO DEL TOTAL
         double totalCompra = 0.0;
 
         for (ItemCarrito item : carrito.getItems()) {
@@ -123,11 +122,9 @@ public class CarritoUseCase {
                 throw new RuntimeException("Compra rechazada: Stock insuficiente para " + producto.getNombre());
             }
 
-            // Se calcula el total acumulado usando el precio real del producto
             totalCompra += producto.getPrecio() * item.getCantidad();
         }
 
-        // 2. CONSULTA DE SALDO EN AUTH
         UsuarioInfo usuario = authGateway.consultarDatosUsuario(usuarioId);
         if (usuario == null) {
             throw new RuntimeException("El usuario no existe.");
@@ -137,17 +134,14 @@ public class CarritoUseCase {
             throw new RuntimeException("Compra rechazada: Saldo insuficiente.");
         }
 
-        // 3. EJECUTAR COBRO EN AUTH
         authGateway.solicitarDescuentoSaldo(usuarioId, BigDecimal.valueOf(totalCompra));
 
-        // 4. DESCONTAR INVENTARIO
         for (ItemCarrito item : carrito.getItems()) {
             Producto producto = productoUseCase.buscarProductoPorId(item.getProductoId());
             producto.setStock(producto.getStock() - item.getCantidad());
             productoUseCase.guardarProducto(producto);
         }
 
-        // 5. ACTUALIZAR ESTADO Y TOTAL DEL CARRITO
         carrito.setPrecioTotal(totalCompra);
         carrito.setEstado("COMPRADO");
         carritoGateway.guardar(carrito);

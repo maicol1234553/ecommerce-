@@ -53,7 +53,7 @@ public class CarritoController {
             String mensaje = carritoUseCase.realizarVenta(usuarioId);
             return ResponseEntity.ok(mensaje);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body("Error al realizar la venta: " + e.getMessage());
+            return ResponseEntity.ok("Error al realizar la venta: " + e.getMessage());
         }
     }
 }
