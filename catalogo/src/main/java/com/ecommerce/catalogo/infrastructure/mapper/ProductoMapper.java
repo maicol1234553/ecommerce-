@@ -4,6 +4,8 @@ import com.ecommerce.catalogo.domain.model.Producto;
 import com.ecommerce.catalogo.infrastructure.driver_adapters.jpa_repository.producto.ProductoData;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class ProductoMapper {
     public Producto toProducto(ProductoData data) {
@@ -25,7 +27,8 @@ public class ProductoMapper {
                 producto.getDescripcion(),
                 producto.getPrecio(),
                 producto.getStock(),
-                producto.getImagenUrl()
+                producto.getImagenUrl(),
+                new ArrayList<>()
         );
     }
 }

@@ -17,20 +17,21 @@ public class UsuarioData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_usuario", length = 255)
 
     private String idUsuario;
-    @Column(length = 255, nullable = false)
+    @Column(name = "nombre", length = 255, nullable = false)
     private String nombre;
-    @Column(length = 255, nullable = false, unique = true)
+    @Column(name = "correo", length = 255, nullable = false, unique = true)
     private String correo;
-    @Column(length = 255, nullable = false)
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
-    @Column(nullable = false)
+    @Column(name = "rol", length = 255, nullable = false)
     private String rol;
-    @Column(nullable = false)
+    @Column(name = "edad", nullable = false)
     private Integer edad;
-    @Column(length = 10, nullable = false)
+    @Column(name = "numero_telefonico", length = 10, nullable = false)
     private String numeroTelefonico;
-    @Column(nullable = true)
+    @Column(name = "saldo", precision = 38, scale = 2)
     private BigDecimal saldo = BigDecimal.ZERO;
 }
