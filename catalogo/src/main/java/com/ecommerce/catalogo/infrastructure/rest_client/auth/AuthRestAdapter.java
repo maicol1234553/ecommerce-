@@ -1,6 +1,5 @@
 package com.ecommerce.catalogo.infrastructure.rest_client.auth;
 
-import com.ecommerce.catalogo.domain.model.UsuarioInfo;
 import com.ecommerce.catalogo.domain.model.gateway.AuthGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,13 +20,12 @@ public class AuthRestAdapter implements AuthGateway {
     private String authServiceUrl;
 
     @Override
-    public UsuarioInfo consultarDatosUsuario(String usuarioId) {
-
+    public BigDecimal consultarSaldo(String usuarioId) {
         String url = authServiceUrl + "/id/" + usuarioId;
-        ResponseEntity<UsuarioInfo> response = restTemplate.getForEntity(url, UsuarioInfo.class);
+        ResponseEntity<UsuarioResponse> response = restTemplate.getForEntity(url, UsuarioResponse.class);
 
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            return response.getBody();
+            return response.getBody().getSaldo();
         }
         throw new RuntimeException("Error al consultar el usuario en Auth.");
     }
@@ -35,7 +33,6 @@ public class AuthRestAdapter implements AuthGateway {
     @Override
     public void solicitarDescuentoSaldo(String usuarioId, BigDecimal montoTotal) {
         String url = authServiceUrl + "/" + usuarioId + "/descontar";
-
 
         Map<String, BigDecimal> requestBody = Map.of("monto", montoTotal);
 
@@ -45,14 +42,14 @@ public class AuthRestAdapter implements AuthGateway {
             throw new RuntimeException("Fondos insuficientes o error en el descuento de saldo.");
         }
     }
+
     @Override
     public boolean existeUsuario(String usuarioId) {
         try {
             String url = authServiceUrl + "/id/" + usuarioId;
-            ResponseEntity<UsuarioInfo> response = restTemplate.getForEntity(url, UsuarioInfo.class);
+            ResponseEntity<UsuarioResponse> response = restTemplate.getForEntity(url, UsuarioResponse.class);
             return response.getStatusCode().is2xxSuccessful() && response.getBody() != null;
         } catch (Exception e) {
-
             return false;
         }
     }

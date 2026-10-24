@@ -9,7 +9,6 @@ import com.ecommerce.catalogo.domain.model.gateway.CarritoGateway;
 import com.ecommerce.catalogo.domain.model.gateway.AuthGateway;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import com.ecommerce.catalogo.domain.model.UsuarioInfo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -125,12 +124,12 @@ public class CarritoUseCase {
             totalCompra += producto.getPrecio() * item.getCantidad();
         }
 
-        UsuarioInfo usuario = authGateway.consultarDatosUsuario(usuarioId);
-        if (usuario == null) {
+        BigDecimal saldo = authGateway.consultarSaldo(usuarioId);
+        if (saldo == null) {
             throw new RuntimeException("El usuario no existe.");
         }
 
-        if (usuario.getSaldo().compareTo(BigDecimal.valueOf(totalCompra)) < 0) {
+        if (saldo.compareTo(BigDecimal.valueOf(totalCompra)) < 0) {
             throw new RuntimeException("Compra rechazada: Saldo insuficiente.");
         }
 

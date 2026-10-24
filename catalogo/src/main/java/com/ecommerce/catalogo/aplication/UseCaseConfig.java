@@ -18,8 +18,8 @@ public class UseCaseConfig {
     @Bean
     public CarritoUseCase carritoUseCase(CarritoGateway carritoGateway,
                                          ProductoUseCase productoUseCase,
-                                         AuthGateway usuarioGateway) {
-        return new CarritoUseCase(carritoGateway, productoUseCase, usuarioGateway);
+                                         AuthGateway authGateway) {
+        return new CarritoUseCase(carritoGateway, productoUseCase, authGateway);
     }
 
 }
